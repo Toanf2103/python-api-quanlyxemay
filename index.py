@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request,Body
+from api import get
 import json
 import pyodbc
 import uvicorn
-from api import get
+
 
 from fastapi.middleware.cors import CORSMiddleware
 # uvicorn index:app --reload
@@ -20,7 +21,7 @@ app.add_middleware(
 
 @app.post("/login")
 def login(username:str,password:str):
-    return checkLogin(username,password)
+    return get.checkLogin(username,password)
 
 @app.get("/getAll")
 def getall():
@@ -39,8 +40,8 @@ def addDonHang(maKH:str,ngayBD:str,ngayKT:str,listCar:str):
     return get.addDonHang(maKH,ngayBD,ngayKT,listCar)
 
 @app.post("/test")
-async def test(request: Request):
-    rq = await request.json() 
+def test(request: Request):
+    rq = request.json() 
     print(rq['listCar']) 
     return get.test(rq['listCar'])
 

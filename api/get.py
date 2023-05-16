@@ -1,6 +1,7 @@
-from Connect import connect
+from api.Connect import connect
+from api.xuli import *
 import pyodbc
-import datetime
+
 
 
 def getAllXe():
@@ -38,41 +39,61 @@ def addXe(tenXe,hangXe,trangThai,bienSoXe,loaiXe,giaThue):
         }
 
 def checkLogin(username,password):
-    conn = connect()
-    cursor = conn.cursor
-    rs={}
-    sql=f"select * from TaiKhoan where taiKhoan='{username}'"
-    print(sql)
-    cursor.execute(sql)
-    record = cursor.fetchone()
-    if record is None:
-        rs = {
-            'status': 'error',
-            'mess' : 'username wrong'
-        }
-    elif record[2]!=password:
-        rs = {
-            'status': 'error',
-            'mess' : 'pass wrong',
-            'test':'test'
-        }
-    else:
-        rs = {
-            "maTaiKhoan":record[0],
-            "taiKhoan":record[1],
-            "matKhau":record[2],
-            "phanQuyen":record[3],
-            "trangThai":record[4],
-            "hoTen":record[5],
-            "ngaySinh":record[6],
-            "cccd":record[7],
-            "sdt":record[8],
-            "diaChi":record[9],
-            "gioiTinh":record[10],
-            "avatar":record[11]
-        }
-    conn.close()
-    return rs
+    
+    # rs={}
+    # if('username' not in rq or 'password' not in rq):
+    #     rs={
+    #         'status': 'error',
+    #         'mess' : 'data invalid'
+    #     }
+    # elif(not rq['username'] or not rq['password']):
+    #     rs={
+    #         'status': 'error',
+    #         'mess' : 'data invalid'
+    #     }
+    # else:
+    #     username=rq['username']
+    #     password=rq['password']
+    #     conn = connect()
+    #     cursor = conn.cursor
+        
+    #     sql=f"select * from TaiKhoan where taiKhoan='{username}'"
+        
+    #     cursor.execute(sql)
+    #     record = cursor.fetchone()
+    #     if record is None:
+    #         rs = {
+    #             'status': 'error',
+    #             'mess' : 'Sai thông tin đăng nhập'
+    #         }
+    #     elif record[2]!=password:
+    #         rs = {
+    #             'status': 'error',
+    #             'mess' : 'Sai thông tin đăng nhập',    
+    #         }
+    #     else:
+    #         rs = {
+    #             'status': 'success',
+    #             'data':{
+    #                 "maTaiKhoan":record[0],
+    #                 "taiKhoan":record[1],
+    #                 "phanQuyen":record[3],
+    #                 "trangThai":record[4],
+    #                 "hoTen":record[5],
+    #                 "ngaySinh":record[6],
+    #                 "cccd":record[7],
+    #                 "sdt":record[8],
+    #                 "diaChi":record[9],
+    #                 "gioiTinh":record[10],
+    #                 "avatar":record[11]
+    #             }
+                
+    #         }
+    #     conn.close()
+    return {
+        'username':username,
+        'pass':password
+    }
 def getDonHang():
     conn = connect()
     cursor = conn.cursor
@@ -83,8 +104,7 @@ def getDonHang():
     rows= cursor.fetchall()
     data=[]
     for item in rows:
-        
-        data.append({'ngayBD':item.ngayBD.strftime("%d-%m-%Y")})
+        data.append({'ngayBD':formatDate(item.ngayBD)})
     return data
 def addDonHang(maKH,ngayBD,ngayKT,listCar):
     conn = connect()
