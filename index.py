@@ -1,16 +1,26 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 import json
 import pyodbc
 import uvicorn
-import get
+from api import get
+
+from fastapi.middleware.cors import CORSMiddleware
 # uvicorn index:app --reload
 
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.post("/login")
 def login(username:str,password:str):
-    return get.checkLogin(username,password)
+    return checkLogin(username,password)
 
 @app.get("/getAll")
 def getall():
@@ -20,6 +30,20 @@ def getall():
 def addXe(tenXe:str,hangXe:str,trangThai:str,bienSoXe:str,loaiXe:str,giaThue:float):
     return get.addXe(tenXe,hangXe,trangThai,bienSoXe,loaiXe,giaThue)
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+@app.get("/getDonHang")
+def getDonHang():
+    return get.getDonHang()
 
+@app.post("/addDonHang")
+def addDonHang(maKH:str,ngayBD:str,ngayKT:str,listCar:str):
+    return get.addDonHang(maKH,ngayBD,ngayKT,listCar)
+
+@app.post("/test")
+async def test(request: Request):
+    rq = await request.json() 
+    print(rq['listCar']) 
+    return get.test(rq['listCar'])
+
+if __name__ == "__main__":
+    
+    uvicorn.run(app, host="localhost", port=5000)

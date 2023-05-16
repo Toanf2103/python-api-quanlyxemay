@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">Gui</button>
+    <script>
+        const btn = document.getElementById('btn');
+        btn.addEventListener('click',(e)=>{
+            const stringList = ["chuỗi 1", "chuỗi 2", "chuỗi 3"];
+
+            const listCar = {listCar:stringList};
+
+            fetch('http://localhost:5000/test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(listCar),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response from API:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+            })
+    </script>
+</body>
+</html>

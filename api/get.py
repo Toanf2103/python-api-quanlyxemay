@@ -1,20 +1,7 @@
+from Connect import connect
 import pyodbc
-class connect():
-    def __init__(self):
-            # Thông tin cơ sở dữ liệu
-        server = 'SQL8001.site4now.net'
-        database = 'db_a9917c_quanlyxemay'
-        username = 'db_a9917c_quanlyxemay_admin'
-        password = 'quanlyxemay1'
+import datetime
 
-        # Tạo chuỗi kết nối
-        connection_string = 'DRIVER={SQL Server};SERVER=' + server + ';DATABASE=' + database + ';UID=' + username + ';PWD=' + password
-        self.connection = pyodbc.connect(connection_string)
-        self.cursor = self.connection.cursor()
-
-    def close(self):
-        self.cursor.close()
-        self.connection.close()
 
 def getAllXe():
     conn = connect()
@@ -35,6 +22,7 @@ def addXe(tenXe,hangXe,trangThai,bienSoXe,loaiXe,giaThue):
     cursor = conn.cursor
     connection= conn.connection
     try:
+        
         cursor.execute("{CALL pr_add_Xe(?, ?, ?, ?, ?, ?)}", (tenXe,hangXe,trangThai,bienSoXe,loaiXe,giaThue))
         connection.commit()
         conn.close()
@@ -85,3 +73,43 @@ def checkLogin(username,password):
         }
     conn.close()
     return rs
+def getDonHang():
+    conn = connect()
+    cursor = conn.cursor
+    
+    sql='select ngayBD from DangKyThueXe'
+    cursor.execute("SET DATEFORMAT dmy")
+    cursor.execute(sql)
+    rows= cursor.fetchall()
+    data=[]
+    for item in rows:
+        
+        data.append({'ngayBD':item.ngayBD.strftime("%d-%m-%Y")})
+    return data
+def addDonHang(maKH,ngayBD,ngayKT,listCar):
+    conn = connect()
+    cursor = conn.cursor
+    connection= conn.connection
+    
+    try:
+        cursor.execute("SET DATEFORMAT dmy")
+        cursor.execute("{CALL pr_add_dangKyThueXe(?, ?, ?, ?)}", (maKH,ngayBD,ngayKT,listCar))
+        connection.commit()
+        conn.close()
+        return {
+            'stt':True
+        }
+    except pyodbc.Error as ex:
+        return {
+            'stt':False,
+            'ms':ex
+        }
+
+def test(listCar):
+    # print(type(listCar))
+    for x in listCar:
+        print(x)
+    return {
+        'type':'cac'
+    }
+
