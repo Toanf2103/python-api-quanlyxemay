@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request,Body
+from fastapi import FastAPI, Request,Body,Form, UploadFile
+from typing import List
 from api import get
 import json
 import pyodbc
@@ -20,8 +21,8 @@ app.add_middleware(
 )
 
 @app.post("/login")
-def login(username:str,password:str):
-    return get.checkLogin(username,password)
+def login(rq = Body()):
+    return get.checkLogin(rq)
 
 @app.get("/getAll")
 def getall():
@@ -40,11 +41,25 @@ def addDonHang(maKH:str,ngayBD:str,ngayKT:str,listCar:str):
     return get.addDonHang(maKH,ngayBD,ngayKT,listCar)
 
 @app.post("/test")
-def test(request: Request):
-    rq = request.json() 
-    print(rq['listCar']) 
-    return get.test(rq['listCar'])
+async def test(request: Request):
+    data=await request.json()
+    print("asdasjdhgfasghjdfjaghsdhjagsf", data)
+    print(data.get("username"),data.get("password"))
+    return get.test(data.get("username"),data.get("password"))
 
-if __name__ == "__main__":
+@app.post("/testImg")
+async def upload_images(images: List[UploadFile] = Form(), name: str = Form(...), password: str = Form(...)):
     
+    
+    return await get.testImg(images, name, password)
+
+@app.post("/process_form")
+async def create_item(request: Request):
+    form_data = await request.form()
+    item_name = form_data["name"]
+    item_description = form_data["password"]
+    # Xử lý dữ liệu form
+    # ...
+    return {"message": form_data["name"]}
+if __name__ == "__main__":    
     uvicorn.run(app, host="localhost", port=5000)

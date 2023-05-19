@@ -8,7 +8,7 @@
 </head>
 <body>
     <button id="btn">Gui</button>
-    <script src="js.js">
+    <!-- <script >
         
         // const btn = document.getElementById('btn');
         // btn.addEventListener('click',(e)=>{
@@ -42,6 +42,30 @@
 
 
         // })
+    </script> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
+        
+        
     </script>
+    <script>
+        const btn = document.getElementById('btn');
+        btn.addEventListener('click',(e)=>{
+            const apiUrl = 'http://localhost:5000/login';
+            const data = {
+                username: "10",
+                password: "5"
+            };
+
+            axios.post(apiUrl, data)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        })
+    </script>
+
 </body>
 </html>
