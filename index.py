@@ -4,6 +4,8 @@ from api import get,user,xe,order
 import json
 import pyodbc
 import uvicorn
+import os
+
 
 
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,6 +13,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 
 app = FastAPI()
+#Lấy đường dẫn hiện tại
+current_file_path = os.path.abspath(__file__)
+
+#lấy đường dẫn Project
+current_directory = os.path.dirname(current_file_path)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,6 +39,11 @@ def addAccount(rq=Body()):
 @app.post('/changePass')
 def addAccount(rq=Body()):
     return user.changePass(rq)
+@app.post('/updateInfoUser')
+async def updateInfo(request: Request):
+    form_data = await request.form()
+    relative_path = os.path.join(current_directory, 'img\imgAvatar')
+    return await user.updateInfoUser(form_data,relative_path)
 
 
 @app.get("/getAllXe}")
@@ -58,8 +71,6 @@ async def test(request: Request):
 
 @app.post("/testImg")
 async def upload_images(images: List[UploadFile] = Form(), name: str = Form(...), password: str = Form(...)):
-    
-    
     return await get.testImg(images, name, password)
 
 @app.post("/process_form")
@@ -72,3 +83,7 @@ async def create_item(request: Request):
     return {"message": form_data["name"]}
 if __name__ == "__main__":    
     uvicorn.run(app, host="localhost", port=5000)
+
+
+
+

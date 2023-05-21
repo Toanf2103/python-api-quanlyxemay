@@ -14,6 +14,10 @@
     <br>
     <br>
     <button id="btn-changePass">Change pass</button>
+    <br>
+    <br>
+    <button id="btn-updateInfo">Update info user</button>
+    <input type="file" name="images" id="img">
     <!-- <script >
         
         // const btn = document.getElementById('btn');
@@ -59,8 +63,8 @@
         btn.addEventListener('click',(e)=>{
             const apiUrl = 'http://localhost:5000/login';
             const data = {
-                username: "test1",
-                password: null
+                username: "1",
+                password: "1"
             };
 
             axios.post(apiUrl, data)
@@ -78,7 +82,7 @@
         btnDangKy.addEventListener('click',(e)=>{
             const apiUrl = 'http://localhost:5000/addAccount';
             const data = {
-                username: "test1asdqweq21",
+                username: "qwe",
                 password: "ad",
                 role:"Khách hàng"
             };
@@ -98,9 +102,9 @@
     btnchangePass.addEventListener('click',(e)=>{
         const apiUrl = 'http://localhost:5000/changePass';
         const data = {
-            username: "test1asdqweq21",
-            newPassword: "asdadsa",
-            oldPassword: "ad"
+            maTaiKhoan: "KH00000002",
+            newPassword: "1",
+            oldPassword: "2"
         };
 
         axios.post(apiUrl, data)
@@ -111,6 +115,39 @@
             console.error(error);
         });
     })
+</script>
+
+<script>
+    const btnupdateInfo = document.getElementById('btn-updateInfo');
+    btnupdateInfo.addEventListener('click',(e)=>{
+        
+        const formData = new FormData();
+        const imageInput = document.getElementById('img');
+        formData.append('maTaiKhoan', "KH00000002");
+        formData.append('email', "3@gmail.com");
+        formData.append('hoTen', "qwesd");
+        formData.append('ngaySinh', "21-02-2002");
+        formData.append('cccd', "asdasd");
+        formData.append('sdt', "2");
+        formData.append('avatar', imageInput.files[0]);
+
+        axios.post('http://localhost:5000/updateInfoUser', formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+            }
+        })
+            .then(response => {
+            // Xử lý phản hồi thành công
+            console.log('Yêu cầu POST thành công.');
+            console.log('Phản hồi từ máy chủ:', response.data);
+            // document.getElementById('h2').innerHTML=response.data
+            })
+            .catch(error => {
+            // Xử lý lỗi nếu có
+            console.error('Lỗi khi gửi yêu cầu POST:', error);
+            });
+    });
+    
 </script>
 
 </body>

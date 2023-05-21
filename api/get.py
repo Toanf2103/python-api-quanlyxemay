@@ -1,6 +1,7 @@
 from api.Connect import connect
 from api.xuli import *
 import pyodbc
+import os
 
 
 def getDonHang():
@@ -42,10 +43,19 @@ def test(username,password):
         'password':password
     }
 
+
+
 async def testImg(images, name, password):
+    current_file_path = os.path.abspath(__file__)
+    current_directory = os.path.dirname(current_file_path)
+    ongnoi=os.path.dirname(current_directory)
+    
+    relative_path = os.path.join(ongnoi, 'testHtml\imgXe')
+    print('ong noui',ongnoi)
+    print(relative_path)
     for x in images:
-        print(type(x))
-        save_path = f"./API_XE/testHtml/{x.filename}"
+        print(x.filename)
+        save_path = f"{relative_path}\{x.filename}"
         with open(save_path, "wb") as file:
             file.write(await x.read())
     print({

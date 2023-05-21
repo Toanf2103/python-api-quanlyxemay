@@ -28,9 +28,9 @@
         const variable2Input = document.getElementById('pass');
 
         // Lặp qua danh sách các tệp ảnh và thêm vào FormData
-        for (let i = 0; i < imageInput.files.length; i++) {
-            formData.append('images', imageInput.files[i]);
-        }
+        // for (let i = 0; i < imageInput.files.length; i++) {
+        //     formData.append('images', imageInput.files[i]);
+        // }
 
         formData.append('name', variable1Input.value);
         formData.append('password', variable2Input.value);

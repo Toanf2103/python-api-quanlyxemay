@@ -1,45 +1,68 @@
-# import os
-# img_dir = "testHTMLAPI"
-# test_file = "testHTMLAPI/test.txt"
-# try:
-#     with open(test_file, "w") as file:
-#         file.write("This is a test file.")
-#     print("Bạn có quyền ghi vào thư mục img.")
-# except IOError:
-#     print("Bạn không có quyền ghi vào thư mục img.")
-# finally:
-#     if os.path.exists(test_file):
-#         os.remove(test_file)
-
-from api.Connect import connect
-from api.xuli import *
+from unidecode import unidecode
+import re
 import pyodbc
+import os
+from api.Connect import connect
+import datetime
+
+def formatDate(ngay):
+    formatType="%d-%m-%Y"
+    return ngay.strftime(formatType)
 
 
+def utf8_to_slug(string):
+    # Convert to ASCII characters
+    string = unidecode(string)
+    
+    # Remove special characters
+    string = re.sub(r"[^\w\s-]", "", string.lower())
+    
+    # Replace spaces with hyphens
+    string = re.sub(r"\s+", "-", string)
+    string=re.sub(r"_","-",string)
+    
+    return string
 
-conn = connect()
-cursor = conn.cursor
-connection= conn.connection
-# try:
-#     taiKhoan='Tioanf121qweqwe'
-#     matKhau='asdasd'
-#     phanQuyen='Khách hàng'
-#     hoTen='asdaskldjtoan'
-#     email='22@gmail.com'  
-#     gioiTinh='M'
-#     cursor.execute("SET DATEFORMAT dmy")
-#     cursor.execute("EXEC pr_add_account @taiKhoan=?, @matKhau=?,@phanQuyen=?,@hoTen=?,@email=?,@gioiTinh=?",taiKhoan,matKhau,phanQuyen,hoTen,email,gioiTinh)
-#     connection.commit()
-#     conn.close()
-#     print(True)
-# except pyodbc.Error as ex:
-#     print(ex)
+# sql="select * from TaiKhoan"
+# conn = connect()
+# cursor = conn.cursor
+# cursor.execute(sql)
+# rows = cursor.fetchall()
 
-taiKhoan='qwe12321'
-sql=f"select * from TaiKhoan where taiKhoan='{taiKhoan}'"
-cursor.execute(sql)
-rows = cursor.fetchone()
-if rows:
-    print(1)
-else:
-    print(2)
+# print(list(record))
+# for x in list(record):
+#     print(dict(x))
+
+
+# columns = [column[0] for column in cursor.description]
+# print(columns)
+
+
+# results = []
+# for row in rows:
+#     record = {}
+#     for i in range(len(columns)):
+#         if isinstance(row[i],datetime.datetime):
+#             row[i]= formatDate(row[i])
+#         record[columns[i]] = row[i]
+        
+#     results.append(record)
+# # In kết quả
+# for result in results:
+#     print(result)
+
+# listParamsInfo=['maTaiKhoan','email','hoTen','ngaySinh','cccd','sdt','diaChi','gioiTinh','avatar']
+# string=''
+# for x in listParamsInfo[1:]:
+#     string+= x +"=%s,"
+
+# print(string)
+
+folder_path="d:\Hoc\Đồ án phần mềm\API_XE\img\imgAvatar"
+file_name = "KH00000002.jpeg"
+for root, dirs, files in os.walk(folder_path):
+    for file in files:
+        if file == file_name:
+            file_path = os.path.join(root, file)
+            os.remove(file_path)
+            print(f"Đã xóa tệp tin: {file_path}")
