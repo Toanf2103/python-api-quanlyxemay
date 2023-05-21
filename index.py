@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Request,Body,Form, UploadFile
 from typing import List
-from api import get
+from api import get,user,xe,order
 import json
 import pyodbc
 import uvicorn
@@ -22,15 +22,19 @@ app.add_middleware(
 
 @app.post("/login")
 def login(rq = Body()):
-    return get.checkLogin(rq)
+    return user.checkLogin(rq)
 
-@app.get("/getAll")
+@app.post('/addAccount')
+def addAccount(rq=Body()):
+    return user.addAccount(rq)
+
+@app.get("/getAllXe}")
 def getall():
-    return get.getAllXe()
+    return xe.getAllXe()
 
 @app.post("/addXe")
 def addXe(tenXe:str,hangXe:str,trangThai:str,bienSoXe:str,loaiXe:str,giaThue:float):
-    return get.addXe(tenXe,hangXe,trangThai,bienSoXe,loaiXe,giaThue)
+    return xe.addXe(tenXe,hangXe,trangThai,bienSoXe,loaiXe,giaThue)
 
 @app.get("/getDonHang")
 def getDonHang():
