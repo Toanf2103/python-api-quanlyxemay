@@ -28,6 +28,11 @@ def login(rq = Body()):
 def addAccount(rq=Body()):
     return user.addAccount(rq)
 
+@app.post('/changePass')
+def addAccount(rq=Body()):
+    return user.changePass(rq)
+
+
 @app.get("/getAllXe}")
 def getall():
     return xe.getAllXe()

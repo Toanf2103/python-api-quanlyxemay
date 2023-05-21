@@ -11,6 +11,9 @@
     <br>
     <br>
     <button id="btn-dangKy">Dang ky</button>
+    <br>
+    <br>
+    <button id="btn-changePass">Change pass</button>
     <!-- <script >
         
         // const btn = document.getElementById('btn');
@@ -89,6 +92,26 @@
             });
         })
     </script>
+
+<script>
+    const btnchangePass = document.getElementById('btn-changePass');
+    btnchangePass.addEventListener('click',(e)=>{
+        const apiUrl = 'http://localhost:5000/changePass';
+        const data = {
+            username: "test1asdqweq21",
+            newPassword: "asdadsa",
+            oldPassword: "ad"
+        };
+
+        axios.post(apiUrl, data)
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    })
+</script>
 
 </body>
 </html>
