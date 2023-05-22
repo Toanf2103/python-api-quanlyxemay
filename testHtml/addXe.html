@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="file" multiple id="input-add">
+    <button id="gui">nhan day</button>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">       
+    </script>
+    <script>
+        btn=document.getElementById('gui')
+        btn.addEventListener('click',function(event){
+            event.preventDefault();
+            const formData = new FormData();
+            const imageInput = document.getElementById('input-add');
+            for (let i = 0; i < imageInput.files.length; i++) {
+                formData.append('images', imageInput.files[i]);
+                console.log(i)
+            }
+            
+            formData.append('tenXe', 'thử đại334');
+            formData.append('hangXe', 'nhà eqwe334');
+            formData.append('bienSoXe', '89123-qweq3312123123');
+            formData.append('loaiXe', 'Ga4');
+            formData.append('giaThue', 210320);
+            formData.append('trangThai', 'Hoạt động');
+            formData.append('moTa', null);
+            console.log(formData)
+            axios.post('http://localhost:5000/addXe', formData, {
+                headers: {
+                'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                // Xử lý phản hồi thành công
+                console.log('Yêu cầu POST thành công.');
+                console.log('Phản hồi từ máy chủ:', response.data);
+            
+            })
+            .catch(error => {
+                // Xử lý lỗi nếu có
+                console.error('Lỗi khi gửi yêu cầu POST:', error);
+            });
+            
+
+        });
+    </script>
+</body>
+</html>

@@ -1,5 +1,7 @@
 from datetime import datetime
 import os
+from unidecode import unidecode
+import re
 def formatDate(ngay):
     formatType="%d-%m-%Y"
     return ngay.strftime(formatType)
@@ -24,10 +26,10 @@ def is_empty_upload_file(upload_file):
         return True
     return False
 
-def getStringSQL(params):
+def getStringSQL(params,char):
     sql=''
     for param in params:
-        sql+= param +"=?,"
+        sql+= char+param +"=?,"
     return sql.rstrip(',')
 def deleteImg(folder_path,file_name):
     for root, dirs, files in os.walk(folder_path):
@@ -64,3 +66,23 @@ def rsData(rows,columnName):
             record[columnName[i]] = row[i]
         results.append(record)
     return results
+
+def utf8_to_slug(string):
+    # Convert to ASCII characters
+    string = unidecode(string)  
+    # Remove special characters
+    string = re.sub(r"[^\w\s-]", "", string.lower()) 
+    # Replace spaces with hyphens
+    string = re.sub(r"\s+", "-", string)
+    string=re.sub(r"_","-",string)
+    return string
+
+def createNameImgXe(name,bienSoXe):
+    name=utf8_to_slug(name)
+    bienSoXe=utf8_to_slug(bienSoXe)
+    return name +"-"+ bienSoXe
+
+# listParamsAccept=['maTaiKhoan','email','hoTen','ngaySinh','cccd','sdt','diaChi','gioiTinh','avatar']
+
+
+# print(listParamsAccept[1:-1])

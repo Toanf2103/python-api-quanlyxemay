@@ -122,7 +122,7 @@ async def updateInfoUser(rq,relative_path):
         else:
             try:
                 paramsUpdate=[param for param in listParams if param not in ['maTaiKhoan','avatar']]
-                sql=f"UPDATE TaiKhoan SET {getStringSQL(paramsUpdate)} WHERE maTaiKhoan='{rq['maTaiKhoan']}'"
+                sql=f"UPDATE TaiKhoan SET {getStringSQL(paramsUpdate,'')} WHERE maTaiKhoan='{rq['maTaiKhoan']}'"
                 new_values=[rq[value] for value in paramsUpdate]
                 cursor.execute('SET DATEFORMAT dmy')
                 cursor.execute(sql,new_values)
@@ -134,8 +134,7 @@ async def updateInfoUser(rq,relative_path):
                     duoiFile=Path(rq['avatar'].filename).suffix
                     tenFile=rq['maTaiKhoan']+duoiFile
                     save_path = f"{relative_path}\{tenFile}"
-                    print(save_path)
-                    print(relative_path)
+                    
                     with open(save_path, "wb") as file:
                         file.write(await rq['avatar'].read())
                     cursor.execute(f"UPDATE TaiKhoan SET avatar='{tenFile}' WHERE maTaiKhoan='{rq['maTaiKhoan']}'")
@@ -148,7 +147,29 @@ async def updateInfoUser(rq,relative_path):
         conn.close()
     return rs
 
-
+def getAllUser(role,q):
+    conn = connect()
+    cursor = conn.cursor 
+    rs={}
+    stringRole=''
+    check=False
+    if role is not None:
+        stringRole=f" phanQuyen='{role}'"
+        check=True
+    strSearch=''
+    if q is not None:
+        if check:
+            strSearch+=" and "
+        strSearch+=f" maTaiKhoan LIKE '%{q}%' or taiKhoan LIKE '%{q}%' or hoTen LIKE '%{q}%'"
+        check=True
+    sql="SELECT * from TaiKhoan "
+    if check:
+        sql+=" WHERE"+stringRole+strSearch
+    cursor.execute(sql)
+    rows = cursor.fetchall()
+    columnName=[column[0] for column in cursor.description]
+    rs = printRs(SUCCESS,None,rsData(rows,columnName))
+    return rs
     
 
 

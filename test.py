@@ -12,15 +12,13 @@ def formatDate(ngay):
 
 def utf8_to_slug(string):
     # Convert to ASCII characters
-    string = unidecode(string)
-    
+    string = unidecode(string)  
     # Remove special characters
-    string = re.sub(r"[^\w\s-]", "", string.lower())
-    
+    string = re.sub(r"[^\w\s-]", "", string.lower()) 
     # Replace spaces with hyphens
     string = re.sub(r"\s+", "-", string)
     string=re.sub(r"_","-",string)
-    
+    string=re.sub(r";","",string)
     return string
 
 # sql="select * from TaiKhoan"
