@@ -79,8 +79,8 @@ async def addXe(request: Request,images: List[UploadFile] =  Form(None)):
 
 
 @app.get("/getDonHang/")
-def getDonHang():
-    return get.getDonHang()
+def getDonHang(q:str=None):
+    return order.getAllOrder(q)
 
 @app.post("/addDonHang")
 def addDonHang(maKH:str,ngayBD:str,ngayKT:str,listCar:str):

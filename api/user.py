@@ -61,9 +61,14 @@ def addAccount(rq):
                 cursor.execute("SET DATEFORMAT dmy")
                 cursor.execute("EXEC pr_add_account @taiKhoan=?, @matKhau=?, @phanQuyen=?",taiKhoan,password,role)
                 connection.commit()
-                rs=printRs(SUCCESS,None,None)
+                sql=f"SELECT * from TaiKhoan WHERE taiKhoan='{taiKhoan}'"
+                cursor.execute(sql)
+                rows=cursor.fetchall()
+                columnName=[column[0] for column in cursor.description]
+                rs=printRs(SUCCESS,None,rsData(rows,columnName))
             except pyodbc.Error as ex:
                 rs=printRs(ERROR,str(ex),None)
+            
         conn.close()
     return rs
 
@@ -104,7 +109,7 @@ def changePass(rq):
 
 async def updateInfoUser(rq,relative_path):
     rs={}
-    listParamsAccept=['maTaiKhoan','email','hoTen','ngaySinh','cccd','sdt','diaChi','gioiTinh','avatar']
+    listParamsAccept=['maTaiKhoan','email','hoTen','trangThai','ngaySinh','cccd','sdt','diaChi','gioiTinh','avatar']
     listParams=list(rq.keys())
     
     if not checkParmasRq(listParams,listParamsAccept):

@@ -81,8 +81,29 @@ def createNameImgXe(name,bienSoXe):
     name=utf8_to_slug(name)
     bienSoXe=utf8_to_slug(bienSoXe)
     return name +"-"+ bienSoXe
+def removeKey(listKey,removeKey):
+    listKey.remove(removeKey)
+    return listKey
 
-# listParamsAccept=['maTaiKhoan','email','hoTen','ngaySinh','cccd','sdt','diaChi','gioiTinh','avatar']
+def mergeData(datas,data_inserts,column_name,name):
+    
+    for data in datas:
+        list_data_merge=[]
+        for data_insert in data_inserts:           
+            if(data_insert[column_name]==data[column_name]):
+                new_dict=data_insert.copy()               
+                new_dict.pop(column_name)
+                # del data_insert[column_name]
+                list_data_merge.append(new_dict)            
+        data[name]=list_data_merge
+    
+    return datas
+
+# my_dict = [{"maDon": 3, "ngayBD": "21-03-2001",  "ngayBD": "31-03-2001"},{"maDon": 3, "ngayBD": "2-03-2001",  "ngayBD": "31-03-2001"},{"maDon": 4, "ngayBD": "312-03-2001",  "ngayBD": "31-03-qwe"}]
+# my_d = [{"maDon": 2, "maXe":12321},{"maDon": 2, "maXe":234},{"maDon": 3, "maXe":12321}]
 
 
-# print(listParamsAccept[1:-1])
+# print(mergeData(my_dict,my_d,"maDon","chiTiet"))
+
+# my_d[0].pop("maDon")
+# print(my_d[0])
