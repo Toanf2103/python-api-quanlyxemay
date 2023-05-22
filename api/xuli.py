@@ -46,14 +46,21 @@ def printRs(type,mess,data):
         else:
             rs['data']=data
     return rs
-
+def getURLImg(columnName,fileName):
+    if columnName=='avatar':
+        return f"getUrlImg/imgAvatar/{fileName}"
+    elif columnName=='hinhAnh':
+        return f"getUrlImg/imgXe/{fileName}"
 def rsData(rows,columnName):
+    columnNameImg=['avatar','hinhAnh']
     results = []
     for row in rows:
         record = {}
         for i in range(len(columnName)):
             if isinstance(row[i],datetime):
                 row[i]= formatDate(row[i])
+            if columnName[i] in columnNameImg:
+                row[i] = getURLImg(columnName[i],row[i])
             record[columnName[i]] = row[i]
         results.append(record)
     return results

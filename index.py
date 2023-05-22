@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request,Body,Form, UploadFile
+from fastapi.responses import FileResponse
 from typing import List
 from api import get,user,xe,order
 import json
@@ -46,7 +47,7 @@ async def updateInfo(request: Request):
     return await user.updateInfoUser(form_data,relative_path)
 
 
-@app.get("/getAllXe}")
+@app.get("/getAllXe")
 def getall():
     return xe.getAllXe()
 
@@ -62,27 +63,21 @@ def getDonHang():
 def addDonHang(maKH:str,ngayBD:str,ngayKT:str,listCar:str):
     return get.addDonHang(maKH,ngayBD,ngayKT,listCar)
 
-@app.post("/test")
-async def test(request: Request):
-    data=await request.json()
-    print("asdasjdhgfasghjdfjaghsdhjagsf", data)
-    print(data.get("username"),data.get("password"))
-    return get.test(data.get("username"),data.get("password"))
 
-@app.post("/testImg")
-async def upload_images(images: List[UploadFile] = Form(), name: str = Form(...), password: str = Form(...)):
-    return await get.testImg(images, name, password)
 
-@app.post("/process_form")
-async def create_item(request: Request):
-    form_data = await request.form()
-    item_name = form_data["name"]
-    item_description = form_data["password"]
-    # Xử lý dữ liệu form
-    # ...
-    return {"message": form_data["name"]}
+
+
+
+
+@app.get("/getUrlImg/{folder}/{filename}")
+async def getUrlImg(folder:str,filename:str):
+    url = os.path.join(current_directory, 'img',folder,filename)
+    return FileResponse(url)
 if __name__ == "__main__":    
     uvicorn.run(app, host="localhost", port=5000)
+
+
+#lấy đường dẫn Project
 
 
 
