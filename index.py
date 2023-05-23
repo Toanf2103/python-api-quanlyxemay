@@ -35,8 +35,10 @@ def login(rq = Body()):
 
 
 @app.get("/getAllUser")
-def login(role:str=None,q:str=None):
-    return user.getAllUser(role,q)
+def getAllUser(page:int=None,role:str=None,q:str=None):
+    if page is None:
+        page=1
+    return user.getAllUser(page,role,q)
 
 
 @app.post('/addAccount')
@@ -44,8 +46,9 @@ def addAccount(rq=Body()):
     return user.addAccount(rq)
 
 @app.post('/changePass')
-def addAccount(rq=Body()):
+def changePass(rq=Body()):
     return user.changePass(rq)
+
 @app.post('/updateInfoUser')
 async def updateInfo(request: Request):
     form_data = await request.form()
@@ -55,7 +58,13 @@ async def updateInfo(request: Request):
 
 @app.get("/getAllXe")
 def getall(q:str=None):
-    return xe.getAllXe(q)
+    return xe.getAllXe(q,True)
+
+@app.get("/getAllXeAdmin")
+def getall(q:str=None,page:int=None):
+    if page is None:
+        page=1
+    return xe.getAllXe(q,False,page)
 @app.get("/getXe/{maXe}")
 def getall(maXe:str):
     return xe.getXe(maXe)
@@ -69,7 +78,7 @@ async def addXe(request: Request,images: List[UploadFile] =  Form()):
     return await xe.addXe(form_data,relative_path,images)
 
 @app.post("/updateXe")
-async def addXe(request: Request,images: List[UploadFile] =  Form(None)):
+async def updateXe(request: Request,images: List[UploadFile] =  Form(None)):
     form_data = await request.form()
 
     relative_path = os.path.join(current_directory, 'img\imgXe')
@@ -78,15 +87,12 @@ async def addXe(request: Request,images: List[UploadFile] =  Form(None)):
 
 
 
-@app.get("/getDonHang/")
+@app.get("/getDonHang")
 def getDonHang(q:str=None,page:int=None):
     if page is None:
         page=1
     return order.getAllOrder(page,q)
 
-@app.post("/addDonHang")
-def addDonHang(maKH:str,ngayBD:str,ngayKT:str,listCar:str):
-    return get.addDonHang(maKH,ngayBD,ngayKT,listCar)
 
 @app.post("/nvSetOrder")
 def nvSetOrder(rq=Body()):
@@ -97,7 +103,7 @@ def addOrder(rq=Body()):
     return order.addOrder(rq)
 
 @app.post("/payOrder")
-def addOrder(rq=Body()):   
+def payOrder(rq=Body()):   
     return order.payOrder(rq)
 
 

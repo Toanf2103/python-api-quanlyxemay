@@ -3,20 +3,37 @@ from api.xuli import *
 import pyodbc
 from pathlib import Path
 
+
 ERROR='error'
 SUCCESS='success'
 DATA_INVALID='Data invalid'
 DATA_NULL='Data null'
 
-def getAllXe(q):
+def getAllXe(q,role,page=None):
+    #role=true khách hàng, role=False NV
+    if page is not None:
+        so_item=10
+        vt=(page-1)*so_item
+
     conn = connect()
     cursor = conn.cursor
     rs = {}
     strSearch=''
+    sqlRole=''
+    sqlPage=''
+    check=False
+    if role:
+        sqlRole=" trangThai in (N'Hoạt động',N'Đang cho thuê') "
+        check=True
+    else:
+        sqlPage=f" order by maXe OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
     if q is not None:
-        strSearch=f" WHERE tenXe LIKE '%{q}%'"
-    sql='SELECT * FROM Xe'+strSearch
-    print(sql)
+        strSearch=f" tenXe LIKE '%{q}%' "
+        check=True
+    where = " WHERE " if check else ""
+    sql='SELECT * FROM Xe'+where+sqlRole+strSearch+sqlPage
+    
+    
     cursor.execute(sql)
     rows = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
@@ -32,6 +49,16 @@ def getAllXe(q):
                 hinh_anh_list.append(getURLImg('hinhAnh',hinhAnh.hinhAnh))
         xe['hinhAnh']=hinh_anh_list
     rs = printRs(SUCCESS,None,dataXe)
+    if not role:
+        sql="SELECT count(maXe) as soluong from Xe "+where+sqlRole+strSearch
+        cursor.execute(sql)
+        row = cursor.fetchone()
+        
+        
+        soLuong= row[0]
+        
+        
+        rs['soTrang']=getSoTrang(soLuong,so_item)
     conn.close()
     return rs
 def getXe(maXe):

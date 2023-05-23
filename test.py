@@ -66,4 +66,4 @@ def utf8_to_slug(string):
 #             os.remove(file_path)
 #             print(f"Đã xóa tệp tin: {file_path}")
 
-print(formatDate(date.today()))
+print(4/3)

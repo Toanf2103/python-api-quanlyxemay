@@ -152,9 +152,16 @@ async def updateInfoUser(rq,relative_path):
         conn.close()
     return rs
 
-def getAllUser(role,q):
+def getAllUser(page,role,q):
+    so_item=10
+    vt=(page-1)*so_item
+
     conn = connect()
     cursor = conn.cursor 
+    sql="SELECT count(maTaiKhoan) as soluong from TaiKhoan"
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    soLuong  = row.soluong
     rs={}
     stringRole=''
     check=False
@@ -170,10 +177,13 @@ def getAllUser(role,q):
     sql="SELECT * from TaiKhoan "
     if check:
         sql+=" WHERE"+stringRole+strSearch
+    sql+=f" order by maTaiKhoan desc OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
     cursor.execute(sql)
     rows = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
+    
     rs = printRs(SUCCESS,None,rsData(rows,columnName))
+    rs['soTrang']=getSoTrang(soLuong,so_item)
     return rs
     
 

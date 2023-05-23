@@ -11,7 +11,7 @@ DATA_INVALID='Data invalid'
 DATA_NULL='Data null'
 
 def getAllOrder(page,q=None,maTaiKhoan=None):
-    so_item=2
+    so_item=10
     vt=(page-1)*so_item
 
     # kt=(page-1)*10+10
@@ -20,9 +20,8 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     rs={}
     strSearch=""
     if q is not None:     
-        strSearch+=f" WHERE maTaiKhoan LIKE '%{q}%''"
+        strSearch+=f" WHERE maTaiKhoan LIKE '%{q}%'' or maThue LIKE '%{q}%''"
     sql=f"SELECT * from DangKyThueXe "+strSearch +f" order by ngayBD desc OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
-    print(sql)
     cursor.execute(sql)
     data_don = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
@@ -44,8 +43,14 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     new_data_chitiet=mergeData(data_chitiet,data_loi,"maLoi","loi")
     new_data=mergeData(data_don,new_data_chitiet,"maThue","chiTiet")
 
+    sql=f"SELECT count(maThue) as soLuong from DangKyThueXe "+strSearch
+    cursor.execute(sql)
+    row = cursor.fetchone()
+    soLuong=row[0]
+    rs = printRs(SUCCESS,None,new_data)
+    rs['soTrang']=getSoTrang(soLuong,so_item)
     conn.close()
-    return new_data
+    return rs
 
 
 def nvSetOrder(rq):

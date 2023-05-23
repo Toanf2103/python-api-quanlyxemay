@@ -2,6 +2,9 @@ from datetime import datetime
 import os
 from unidecode import unidecode
 import re
+import math
+
+
 def formatDate(ngay):
     formatType="%d-%m-%Y"
     return ngay.strftime(formatType)
@@ -101,4 +104,7 @@ def mergeData(datas,data_inserts,column_name,name):
 
 def getDateNow():
     return formatDate(datetime.now())
+
+def getSoTrang(soLuong,item):
+    return math.ceil(soLuong/item)
 
