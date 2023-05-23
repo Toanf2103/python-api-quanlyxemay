@@ -42,8 +42,8 @@
         btn.addEventListener('click',(e)=>{
             const apiUrl = 'http://localhost:5000/login';
             const data = {
-                username: "1234234",
-                password: "2"
+                username: "1",
+                password: "1"
             };
 
             axios.post(apiUrl, data)
@@ -62,8 +62,8 @@
         btnDangKy.addEventListener('click',(e)=>{
             const apiUrl = 'http://localhost:5000/addAccount';
             const data = {
-                username: "qwe",
-                password: "ad",
+                username: "qweqwe313234q",
+                password: "adqweq",
                 role:"Khách hàng"
             };
 
@@ -83,8 +83,8 @@
         const apiUrl = 'http://localhost:5000/changePass';
         const data = {
             maTaiKhoan: "KH00000002",
-            newPassword: "1",
-            oldPassword: "2"
+            newPassword: "2",
+            oldPassword: "1"
         };
 
         axios.post(apiUrl, data)
@@ -104,7 +104,7 @@
         const formData = new FormData();
         const imageInput = document.getElementById('img');
         formData.append('maTaiKhoan', "KH00000002");
-        formData.append('email', "3@gmail.com");
+        formData.append('email', "3qweqw@gmail.com");
         formData.append('hoTen', "qwesd");
         formData.append('ngaySinh', "21-02-2002");
         formData.append('cccd', "asdasd");
