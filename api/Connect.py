@@ -16,4 +16,12 @@ class connect():
         self.cursor.close()
         self.connection.close()
     
+    def dataNotExist(self,ten_bang,ten_cot,gia_tri):
+        sql=f"SELECT * from {ten_bang} where {ten_cot}='{gia_tri}'"
+        self.cursor.execute(sql)
+        row = self.cursor.fetchone()
+        if row is None:
+            return True
+        return False
+    
     

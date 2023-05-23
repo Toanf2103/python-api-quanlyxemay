@@ -4,6 +4,7 @@ import pyodbc
 import os
 from api.Connect import connect
 import datetime
+from datetime import date
 
 def formatDate(ngay):
     formatType="%d-%m-%Y"
@@ -56,11 +57,13 @@ def utf8_to_slug(string):
 
 # print(string)
 
-folder_path="d:\Hoc\Đồ án phần mềm\API_XE\img\imgAvatar"
-file_name = "KH00000002.jpeg"
-for root, dirs, files in os.walk(folder_path):
-    for file in files:
-        if file == file_name:
-            file_path = os.path.join(root, file)
-            os.remove(file_path)
-            print(f"Đã xóa tệp tin: {file_path}")
+# folder_path="d:\Hoc\Đồ án phần mềm\API_XE\img\imgAvatar"
+# file_name = "KH00000002.jpeg"
+# for root, dirs, files in os.walk(folder_path):
+#     for file in files:
+#         if file == file_name:
+#             file_path = os.path.join(root, file)
+#             os.remove(file_path)
+#             print(f"Đã xóa tệp tin: {file_path}")
+
+print(formatDate(date.today()))

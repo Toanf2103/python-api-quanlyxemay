@@ -79,12 +79,28 @@ async def addXe(request: Request,images: List[UploadFile] =  Form(None)):
 
 
 @app.get("/getDonHang/")
-def getDonHang(q:str=None):
-    return order.getAllOrder(q)
+def getDonHang(q:str=None,page:int=None):
+    if page is None:
+        page=1
+    return order.getAllOrder(page,q)
 
 @app.post("/addDonHang")
 def addDonHang(maKH:str,ngayBD:str,ngayKT:str,listCar:str):
     return get.addDonHang(maKH,ngayBD,ngayKT,listCar)
+
+@app.post("/nvSetOrder")
+def nvSetOrder(rq=Body()):
+    return order.nvSetOrder(rq)
+
+@app.post("/addOrder")
+def addOrder(rq=Body()):   
+    return order.addOrder(rq)
+
+@app.post("/payOrder")
+def addOrder(rq=Body()):   
+    return order.payOrder(rq)
+
+
 
 @app.get("/getUrlImg/{folder}/{filename}")
 async def getUrlImg(folder:str,filename:str):

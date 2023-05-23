@@ -1,17 +1,13 @@
 
 
+list1 = [1, 2, 3]
+list2 = [1, 2, 3, 4,7,8]
 
-my_dict = {"key1": 2, "key3": 4, "key2": 5}
-keys = list(my_dict.keys())
-keys.remove("key3")
-print(keys)
+elements_not_in_list2 = set(list1) - set(list2)
 
-my_dict = {'maDon': 2, 'maXe': 12321}
-key_to_remove = "maDon"  # Key bạn muốn loại bỏ
-
-
-del my_dict["maDon" ]
-
-print(my_dict)
+result = list(elements_not_in_list2)
+print(result)
 
 
+if len(result)==0:
+    print("rong")

@@ -7,8 +7,8 @@ def formatDate(ngay):
     return ngay.strftime(formatType)
 
 def checkInvalid(rq,params):
-    for param in params:
-        if param not in rq:
+    for item in rq:
+        if item not in params:
             return False
     return True
 def checkNull(rq,params):
@@ -99,11 +99,6 @@ def mergeData(datas,data_inserts,column_name,name):
     
     return datas
 
-# my_dict = [{"maDon": 3, "ngayBD": "21-03-2001",  "ngayBD": "31-03-2001"},{"maDon": 3, "ngayBD": "2-03-2001",  "ngayBD": "31-03-2001"},{"maDon": 4, "ngayBD": "312-03-2001",  "ngayBD": "31-03-qwe"}]
-# my_d = [{"maDon": 2, "maXe":12321},{"maDon": 2, "maXe":234},{"maDon": 3, "maXe":12321}]
+def getDateNow():
+    return formatDate(datetime.now())
 
-
-# print(mergeData(my_dict,my_d,"maDon","chiTiet"))
-
-# my_d[0].pop("maDon")
-# print(my_d[0])

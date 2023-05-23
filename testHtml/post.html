@@ -19,41 +19,19 @@
     <button id="btn-updateInfo">Update info user</button>
     <input type="file" name="images" id="img">
     <h2 id="h2"></h2>
-    <!-- <script >
-        
-        // const btn = document.getElementById('btn');
-        // btn.addEventListener('click',(e)=>{
-        //     const stringList = ["chuỗi 1", "chuỗi 2", "chuỗi 3"];
 
-        //     const listCar = {username:'1',password:'1'};
+    <br>
+    <br>
+    <button id="btn-updateOder">updateOder</button>
 
-        //     // fetch('http://localhost:5000/login', {
-        //     // method: 'POST',
-        //     // headers: {
-        //     //     'Content-Type': 'application/json',
-        //     // },
-        //     // body: JSON.stringify(listCar),
-        //     // })
-        //     // .then(response => response.json())
-        //     // .then(data => {
-        //     //     console.log('Response from API:', data);
-        //     // })
-        //     // .catch(error => {
-        //     //     console.error('Error:', error);
-        //     // });
+    <br>
+    <br>
+    <button id="btn-addOder">addOder</button>
 
+    <br>
+    <br>
+    <button id="btn-thanhToan">bill</button>
 
-        //     axios.post('http://localhost:5000/login', listCar)
-        //     .then(response => {
-        //         console.log(response.data);
-        //     })
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
-
-
-        // })
-    </script> -->
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js">
         
@@ -64,8 +42,8 @@
         btn.addEventListener('click',(e)=>{
             const apiUrl = 'http://localhost:5000/login';
             const data = {
-                username: "1",
-                password: "1"
+                username: "1234234",
+                password: "2"
             };
 
             axios.post(apiUrl, data)
@@ -150,6 +128,104 @@
             });
     });
     
+</script>
+
+<script>
+    const updateOder = document.getElementById('btn-updateOder');
+    updateOder.addEventListener('click',(e)=>{
+        const apiUrl = 'http://localhost:5000/nvSetOrder';
+        const data = {
+            maNVDuyet: "NV00000001",
+            maThue: "DH00000003",
+            trangThai: "Đã duyệt"
+        };
+
+        axios.post(apiUrl, data)
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    })
+</script>
+
+<script>
+    const addOder = document.getElementById('btn-addOder');
+    addOder.addEventListener('click',(e)=>{
+        const apiUrl = 'http://localhost:5000/addOrder';
+        const data = {
+            maKH: "KH00000003",
+            ngayBD: "24-05-2023",
+            ngayKT: "29-05-2023",
+            listMoto :[
+                "XE00000006",
+                "XE00000005"
+            ]
+        };
+
+        axios.post(apiUrl, data)
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    })
+</script>
+
+<script>
+    const thanhToan = document.getElementById('btn-thanhToan');
+    thanhToan.addEventListener('click',(e)=>{
+        const apiUrl = 'http://localhost:5000/payOrder';
+        const data = {
+            maThue:"DH00000003",
+            maNVNhanXe:"NV00000001",
+            
+            xe:[
+                {
+                    maXe:"XE00000002",
+                    maLoi:5,
+                    loi:[
+                        {
+                            maLoaiLoi:2,
+                            tienPhat:787,
+                            ghiChu:"Trễ hạn"
+                        },
+                        {
+                            maLoaiLoi:3,
+                            tienPhat:345,
+                            ghiChu:"Hư phụ tùng"
+                        }
+                    ]
+                },
+                {
+                    maXe:"XE00000003",
+                    maLoi:6,
+                    loi:[
+                        {
+                            maLoaiLoi:4,
+                            tienPhat:434,
+                            ghiChu:"Trầy xước xe"
+                        },
+                        {
+                            maLoaiLoi:5,
+                            tienPhat:123,
+                            ghiChu:"tùm lum"
+                        }
+                    ]
+                }
+            ]
+        };
+
+        axios.post(apiUrl, data)
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    })
 </script>
 
 </body>
