@@ -64,7 +64,7 @@ def rsData(rows,columnName):
         for i in range(len(columnName)):
             if isinstance(row[i],datetime):
                 row[i]= formatDate(row[i])
-            if columnName[i] in columnNameImg:
+            if columnName[i] in columnNameImg and row[i] is not None:
                 row[i] = getURLImg(columnName[i],row[i])
             record[columnName[i]] = row[i]
         results.append(record)
