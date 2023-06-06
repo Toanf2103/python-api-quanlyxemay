@@ -20,8 +20,9 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     rs={}
     strSearch=""
     if q is not None:     
-        strSearch+=f" WHERE maTaiKhoan LIKE '%{q}%'' or maThue LIKE '%{q}%''"
+        strSearch+=f" WHERE maKH LIKE '%{q}%' or maThue LIKE '%{q}%'"
     sql=f"SELECT * from DangKyThueXe "+strSearch +f" order by ngayBD desc OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
+    
     cursor.execute(sql)
     data_don = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
@@ -41,15 +42,15 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     data_loi=rsData(data_loi,columnName)
     
     new_data_chitiet=mergeData(data_chitiet,data_loi,"maLoi","loi")
-    print(new_data_chitiet)
+    
     
     new_data=mergeData(data_don,new_data_chitiet,"maThue","chiTiet")
-
+    print(new_data)
     sql=f"SELECT count(maThue) as soLuong from DangKyThueXe "+strSearch
     cursor.execute(sql)
     row = cursor.fetchone()
     soLuong=row[0]
-    rs = printRs(SUCCESS,None,new_data)
+    rs = printRs(SUCCESS,None,new_data,True)
     rs['soTrang']=getSoTrang(soLuong,so_item)
     conn.close()
     return rs

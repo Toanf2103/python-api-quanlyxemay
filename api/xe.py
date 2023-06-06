@@ -28,10 +28,14 @@ def getAllXe(q,role,page=None):
     else:
         sqlPage=f" order by maXe OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
     if q is not None:
-        strSearch=f" tenXe LIKE '%{q}%' "
+        strSearch=f" and tenXe LIKE '%{q}%' "
         check=True
-    where = " WHERE " if check else ""
+    where = " WHERE " if check else "as"
+    
+    
     sql='SELECT * FROM Xe'+where+sqlRole+strSearch+sqlPage
+    print(sql)
+    
     
     
     cursor.execute(sql)

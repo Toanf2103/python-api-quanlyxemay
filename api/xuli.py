@@ -40,13 +40,13 @@ def deleteImg(folder_path,file_name):
             if file == file_name:
                 file_path = os.path.join(root, file)
                 os.remove(file_path)
-def printRs(type,mess,data):
+def printRs(type,mess,data,checkList=False):
     rs={}
     rs['status']=type
     if mess is not None:
         rs['mess']=mess
     if data is not None:
-        if len(data)==1:
+        if len(data)==1 and checkList==False:
             rs['data']=data[0]
         else:
             rs['data']=data
