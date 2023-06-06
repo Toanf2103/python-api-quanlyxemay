@@ -132,7 +132,6 @@ async def updateInfoUser(rq,relative_path):
                 cursor.execute('SET DATEFORMAT dmy')
                 cursor.execute(sql,new_values)
                 
-                rs=printRs(SUCCESS,'Đổi thông tin thành công',None)
                 
                 if 'avatar' in listParams and not isinstance(rq['avatar'],str):
                     deleteImg(relative_path,row.avatar)
@@ -144,6 +143,14 @@ async def updateInfoUser(rq,relative_path):
                         file.write(await rq['avatar'].read())
                     cursor.execute(f"UPDATE TaiKhoan SET avatar='{tenFile}' WHERE maTaiKhoan='{rq['maTaiKhoan']}'")
                 cursor.commit()
+                sql=f"SELECT * from TaiKhoan Where maTaiKhoan='{rq['maTaiKhoan']}'"
+                cursor.execute(sql)
+               
+                newInfo = cursor.fetchall()
+                
+                columnName=[column[0] for column in cursor.description]
+                rs = printRs(SUCCESS,'Đổi thông tin thành công',rsData(newInfo,columnName))
+                
             except pyodbc as ex:
                 print(ex)
                 rs=printRs(ERROR,str(ex),None)     
