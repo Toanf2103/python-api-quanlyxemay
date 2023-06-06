@@ -26,14 +26,14 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     data_don = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
     data_don=rsData(data_don,columnName)
+    
 
-
-    sql="SELECT * from ChiTietThueXe"
+    sql="SELECT ChiTietThueXe.*,tenXe,loaiXe,hangXe,bienSoXe from ChiTietThueXe,Xe where ChiTietThueXe.maXe=Xe.maXe"
     cursor.execute(sql)
     data_chitiet = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
     data_chitiet=rsData(data_chitiet,columnName)
-
+    
     sql="SELECT ct.maLoi as maLoi,lp.noiDungLoi as noiDungLoi,ct.ghiChu as ghiChu,ct.tienPhat as tienPhat FROM ChiTietLoiPhat as ct, LoiPhat as lp WHERE ct.maLoaiLoi = lp.maLoaiLoi"
     cursor.execute(sql)
     data_loi = cursor.fetchall()
@@ -41,6 +41,8 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     data_loi=rsData(data_loi,columnName)
     
     new_data_chitiet=mergeData(data_chitiet,data_loi,"maLoi","loi")
+    print(new_data_chitiet)
+    
     new_data=mergeData(data_don,new_data_chitiet,"maThue","chiTiet")
 
     sql=f"SELECT count(maThue) as soLuong from DangKyThueXe "+strSearch
@@ -52,6 +54,44 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     conn.close()
     return rs
 
+def getOrder(id_order):
+    
+    # kt=(page-1)*10+10
+    conn = connect()
+    cursor = conn.cursor 
+    rs={}
+    
+    sql=f"SELECT * from DangKyThueXe where maThue='{id_order}'"
+    
+    
+    cursor.execute(sql)
+    data_don = cursor.fetchall()
+    columnName=[column[0] for column in cursor.description]
+    data_don=rsData(data_don,columnName)
+
+    
+    
+    sql=f"SELECT ChiTietThueXe.*,tenXe,loaiXe,hangXe,bienSoXe from ChiTietThueXe,Xe where ChiTietThueXe.maXe=Xe.maXe and ChiTietThueXe.maThue='{data_don[0]['maThue']}'"
+    cursor.execute(sql)
+    data_chitiet = cursor.fetchall()
+    columnName=[column[0] for column in cursor.description]
+    data_chitiet=rsData(data_chitiet,columnName)
+
+    sql=f"SELECT ct.maLoi as maLoi,lp.noiDungLoi as noiDungLoi,ct.ghiChu as ghiChu,ct.tienPhat as tienPhat FROM ChiTietLoiPhat as ct, LoiPhat as lp WHERE ct.maLoaiLoi = lp.maLoaiLoi and ct.maLoi='{data_chitiet[0]['maLoi']}'"
+    cursor.execute(sql)
+    data_loi = cursor.fetchall()
+    columnName=[column[0] for column in cursor.description]
+    data_loi=rsData(data_loi,columnName)
+    
+    new_data_chitiet=mergeData(data_chitiet,data_loi,"maLoi","loi")
+    new_data=mergeData(data_don,new_data_chitiet,"maThue","chiTiet")
+
+    
+    
+    rs = printRs(SUCCESS,None,new_data)
+   
+    conn.close()
+    return rs
 
 def nvSetOrder(rq):
     paramsAcceep=['maNVDuyet','maThue','trangThai']
@@ -147,21 +187,27 @@ def payOrder(rq):
         elif conn.dataNotExist('TaiKhoan','maTaiKhoan',rq['maNVNhanXe']):
             rs= printRs(ERROR,"Mã nhân viên không tồn tại",None)
         else:
+            
             for xe in rq['xe']:
                 #Update Chi tiet thue xe
                 cursor.execute("SET DATEFORMAT dmy")
-                sql=f"UPDATE ChiTietThueXe SET ngayTra=?,maNVNhanXe=? WHERE maThue=?"
-                new_value=[getDateNow(),rq['maNVNhanXe'],rq['maThue']]
+                sql=f"UPDATE ChiTietThueXe SET ngayTra=?,maNVNhanXe=? WHERE maThue=? and maXe=?"
+                new_value=[getDateNow(),rq['maNVNhanXe'],rq['maThue'],xe['maXe']]
                 cursor.execute(sql,new_value)
 
                 #Update lỗi xe
                 sql=f"INSERT INTO ChiTietLoiPhat (maLoi, maLoaiLoi,ghiChu,tienPhat) VALUES (?,?,?,?)"
                 new_value_loi=[]
                 for loi in xe['loi']:
-                    new_value_loi_item=(xe['maLoi'],loi['maLoaiLoi'],loi['ghiChu'],loi['tienPhat'])
+                    txtGhiChu=''
+                    if 'ghiChu' in loi:
+                        txtGhiChu=loi['ghiChu']
+                    new_value_loi_item=(xe['maLoi'],loi['maLoaiLoi'],txtGhiChu,loi['tienPhat'])
                     new_value_loi.append(new_value_loi_item)
-                cursor.executemany(sql,new_value_loi)
+                if(len(new_value_loi)!=0):
+                    cursor.executemany(sql,new_value_loi)
             rs = printRs(SUCCESS,"Thanh toán hoàn tất",None)
             cursor.commit()
         conn.close()
     return rs
+

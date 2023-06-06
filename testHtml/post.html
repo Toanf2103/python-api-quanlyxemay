@@ -103,13 +103,16 @@
         
         const formData = new FormData();
         const imageInput = document.getElementById('img');
-        formData.append('maTaiKhoan', "KH00000002");
+        formData.append('maTaiKhoan', "KH00000004");
         formData.append('email', "3qweqw@gmail.com");
-        formData.append('hoTen', "qwesd");
+        formData.append('hoTen', "Bùi biết trường");
         formData.append('ngaySinh', "21-02-2002");
+        
+
         formData.append('cccd', "asdasd");
         formData.append('sdt', "2");
         formData.append('avatar', imageInput.files[0]);
+        formData.append('diaChi', 'Liên chiểu, đà nẵng');
 
         axios.post('http://localhost:5000/updateInfoUser', formData, {
             headers: {
@@ -155,12 +158,12 @@
     addOder.addEventListener('click',(e)=>{
         const apiUrl = 'http://localhost:5000/addOrder';
         const data = {
-            maKH: "KH00000003",
-            ngayBD: "24-05-2023",
-            ngayKT: "29-05-2023",
+            maKH: "KH00000001",
+            ngayBD: "24-05-2018",
+            ngayKT: "29-05-2019",
             listMoto :[
-                "XE00000006",
-                "XE00000005"
+                "XE00000004",
+                "XE00000003"
             ]
         };
 
@@ -179,29 +182,13 @@
     thanhToan.addEventListener('click',(e)=>{
         const apiUrl = 'http://localhost:5000/payOrder';
         const data = {
-            maThue:"DH00000003",
-            maNVNhanXe:"NV00000001",
-            
+            maThue:"DH00000007",
+            maNVNhanXe:"NV00000001",            
             xe:[
-                {
-                    maXe:"XE00000002",
-                    maLoi:5,
-                    loi:[
-                        {
-                            maLoaiLoi:2,
-                            tienPhat:787,
-                            ghiChu:"Trễ hạn"
-                        },
-                        {
-                            maLoaiLoi:3,
-                            tienPhat:345,
-                            ghiChu:"Hư phụ tùng"
-                        }
-                    ]
-                },
+                
                 {
                     maXe:"XE00000003",
-                    maLoi:6,
+                    maLoi:14,
                     loi:[
                         {
                             maLoaiLoi:4,
@@ -216,7 +203,7 @@
                     ]
                 }
             ]
-        };
+        }; 
 
         axios.post(apiUrl, data)
         .then(response => {

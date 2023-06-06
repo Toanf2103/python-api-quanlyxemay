@@ -87,12 +87,14 @@ async def updateXe(request: Request,images: List[UploadFile] =  Form(None)):
 
 
     
-@app.get("/getDonHang")
+@app.get("/getAllOrder")
 def getDonHang(q:str=None,page:int=None):
     if page is None:
         page=1
     return order.getAllOrder(page,q)
-
+@app.get("/getOrder/{id_order}")
+def getOrder(id_order):
+    return order.getOrder(id_order)
 
 @app.post("/nvSetOrder")
 def nvSetOrder(rq=Body()):
@@ -107,6 +109,9 @@ def payOrder(rq=Body()):
     return order.payOrder(rq)
 
 
+@app.get("/getAllLoi")
+def getAllLoi():
+    return get.getALlLoi()
 
 @app.get("/getUrlImg/{folder}/{filename}")
 async def getUrlImg(folder:str,filename:str):
@@ -117,6 +122,8 @@ if __name__ == "__main__":
 
 
 #lấy đường dẫn Project
+
+
 
 
 

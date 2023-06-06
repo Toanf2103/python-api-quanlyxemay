@@ -1,5 +1,6 @@
 import pyodbc
 class connect():
+
     def __init__(self):
             # Thông tin cơ sở dữ liệu
         server = 'SQL8001.site4now.net'
