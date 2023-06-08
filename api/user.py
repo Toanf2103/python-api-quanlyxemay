@@ -127,12 +127,12 @@ async def updateInfoUser(rq,relative_path):
         else:
             try:
                 paramsUpdate=[param for param in listParams if param not in ['maTaiKhoan','avatar']]
-                sql=f"UPDATE TaiKhoan SET {getStringSQL(paramsUpdate,'')} WHERE maTaiKhoan='{rq['maTaiKhoan']}'"
-                new_values=[rq[value] for value in paramsUpdate]
-                cursor.execute('SET DATEFORMAT dmy')
-                cursor.execute(sql,new_values)
-                
-                
+                if len(paramsUpdate)!=0:
+                    sql=f"UPDATE TaiKhoan SET {getStringSQL(paramsUpdate,'')} WHERE maTaiKhoan='{rq['maTaiKhoan']}'"
+                    new_values=[rq[value] for value in paramsUpdate]
+                    cursor.execute('SET DATEFORMAT dmy')
+                    cursor.execute(sql,new_values)
+  
                 if 'avatar' in listParams and not isinstance(rq['avatar'],str):
                     deleteImg(relative_path,row.avatar)
                     duoiFile=Path(rq['avatar'].filename).suffix
@@ -147,7 +147,7 @@ async def updateInfoUser(rq,relative_path):
                 cursor.execute(sql)
                
                 newInfo = cursor.fetchall()
-                
+                print(sql)
                 columnName=[column[0] for column in cursor.description]
                 rs = printRs(SUCCESS,'Đổi thông tin thành công',rsData(newInfo,columnName))
                 

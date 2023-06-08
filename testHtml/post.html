@@ -103,16 +103,16 @@
         
         const formData = new FormData();
         const imageInput = document.getElementById('img');
-        formData.append('maTaiKhoan', "KH00000004");
+        formData.append('maTaiKhoan', "KH00000003");
         formData.append('email', "3qweqw@gmail.com");
-        formData.append('hoTen', "Bùi biết trường");
+        formData.append('hoTen', "Bùi asd trường");
         formData.append('ngaySinh', "21-02-2002");
         
 
-        formData.append('cccd', "asdasd");
-        formData.append('sdt', "2");
+        // formData.append('cccd', "asdasd");
+        // formData.append('sdt', "0000");
         formData.append('avatar', imageInput.files[0]);
-        formData.append('diaChi', 'Liên chiểu, đà nẵng');
+        // formData.append('diaChi', 'Liên chiểu, đà nẵng');
 
         axios.post('http://localhost:5000/updateInfoUser', formData, {
             headers: {
