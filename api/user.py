@@ -10,7 +10,7 @@ DATA_NULL='Data null'
 
 def checkLogin(rq):    
     rs={}
-    print(list(rq))
+    
     if(not checkInvalid(rq,['username','password'])):
         rs=printRs(ERROR,DATA_INVALID,None)
         

@@ -158,6 +158,7 @@ def addOrder(rq):
         rows = cursor.fetchall()
         # for car in rq['listMoto']:
         #     if car
+        
         new_rows = [row[0] for row in rows]
         
         xe_not_correct=set(rq['listMoto']) - set(new_rows)
@@ -188,27 +189,29 @@ def payOrder(rq):
         elif conn.dataNotExist('TaiKhoan','maTaiKhoan',rq['maNVNhanXe']):
             rs= printRs(ERROR,"Mã nhân viên không tồn tại",None)
         else:
-            
-            for xe in rq['xe']:
-                #Update Chi tiet thue xe
-                cursor.execute("SET DATEFORMAT dmy")
-                sql=f"UPDATE ChiTietThueXe SET ngayTra=?,maNVNhanXe=? WHERE maThue=? and maXe=?"
-                new_value=[getDateNow(),rq['maNVNhanXe'],rq['maThue'],xe['maXe']]
-                cursor.execute(sql,new_value)
+            try:
+                for xe in rq['xe']:
+                    #Update Chi tiet thue xe
+                    cursor.execute("SET DATEFORMAT dmy")
+                    sql=f"UPDATE ChiTietThueXe SET ngayTra=?,maNVNhanXe=? WHERE maThue=? and maXe=?"
+                    new_value=[getDateNow(),rq['maNVNhanXe'],rq['maThue'],xe['maXe']]
+                    cursor.execute(sql,new_value)
 
-                #Update lỗi xe
-                sql=f"INSERT INTO ChiTietLoiPhat (maLoi, maLoaiLoi,ghiChu,tienPhat) VALUES (?,?,?,?)"
-                new_value_loi=[]
-                for loi in xe['loi']:
-                    txtGhiChu=''
-                    if 'ghiChu' in loi:
-                        txtGhiChu=loi['ghiChu']
-                    new_value_loi_item=(xe['maLoi'],loi['maLoaiLoi'],txtGhiChu,loi['tienPhat'])
-                    new_value_loi.append(new_value_loi_item)
-                if(len(new_value_loi)!=0):
-                    cursor.executemany(sql,new_value_loi)
-            rs = printRs(SUCCESS,"Thanh toán hoàn tất",None)
-            cursor.commit()
+                    #Update lỗi xe
+                    sql=f"INSERT INTO ChiTietLoiPhat (maLoi, maLoaiLoi,ghiChu,tienPhat) VALUES (?,?,?,?)"
+                    new_value_loi=[]
+                    for loi in xe['loi']:
+                        txtGhiChu=''
+                        if 'ghiChu' in loi:
+                            txtGhiChu=loi['ghiChu']
+                        new_value_loi_item=(xe['maLoi'],loi['maLoaiLoi'],txtGhiChu,loi['tienPhat'])
+                        new_value_loi.append(new_value_loi_item)
+                    if(len(new_value_loi)!=0):
+                        cursor.executemany(sql,new_value_loi)
+                rs = printRs(SUCCESS,"Thanh toán hoàn tất",None)
+                cursor.commit()
+            except:
+                rs = printRs(ERROR,"Lỗi",None)
         conn.close()
     return rs
 

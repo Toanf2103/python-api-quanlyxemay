@@ -105,7 +105,8 @@ def addOrder(rq=Body()):
     return order.addOrder(rq)
 
 @app.post("/payOrder")
-def payOrder(rq=Body()):   
+def payOrder(rq=Body()):
+    print("load")   
     return order.payOrder(rq)
 
 

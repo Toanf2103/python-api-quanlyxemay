@@ -119,16 +119,16 @@
             'Content-Type': 'multipart/form-data'
             }
         })
-            .then(response => {
-            // Xử lý phản hồi thành công
-            console.log('Yêu cầu POST thành công.');
-            console.log('Phản hồi từ máy chủ:', response.data);
-            // document.getElementById('h2').innerHTML=response.data
-            })
-            .catch(error => {
-            // Xử lý lỗi nếu có
-            console.error('Lỗi khi gửi yêu cầu POST:', error);
-            });
+        .then(response => {
+        // Xử lý phản hồi thành công
+        console.log('Yêu cầu POST thành công.');
+        console.log('Phản hồi từ máy chủ:', response.data);
+        // document.getElementById('h2').innerHTML=response.data
+        })
+        .catch(error => {
+        // Xử lý lỗi nếu có
+        console.error('Lỗi khi gửi yêu cầu POST:', error);
+        });
     });
     
 </script>
@@ -159,8 +159,8 @@
         const apiUrl = 'http://localhost:5000/addOrder';
         const data = {
             maKH: "KH00000001",
-            ngayBD: "24-05-2018",
-            ngayKT: "29-05-2019",
+            ngayBD: "24-05-2030",
+            ngayKT: "29-05-2032",
             listMoto :[
                 "XE00000004",
                 "XE00000003"
