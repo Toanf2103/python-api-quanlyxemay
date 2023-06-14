@@ -112,8 +112,10 @@ async def addXe(rq,relative_path,files):
         connection= conn.connection
         try:          
             sql=f"SELECT * from Xe where bienSoXe='{rq['bienSoXe']}'"
+            
             cursor.execute(sql)
-            row = cursor.fetchone()           
+            row = cursor.fetchone()
+            print(row)          
             if row:
                 rs= printRs(ERROR,"Biển số xe đã tồn tại",None)
             else:    
@@ -124,6 +126,7 @@ async def addXe(rq,relative_path,files):
                         duoiFile=Path(x.filename).suffix
                         tenFile=createNameImgXe(rq['tenXe'],rq['bienSoXe'])+"-"+str(i)+duoiFile
                         save_path = f"{relative_path}\{tenFile}"
+                        
                         with open(save_path, "wb") as file:
                             file.write(await x.read())
                         strListHinhAnh+=tenFile+";"
@@ -193,10 +196,10 @@ async def updateXe(rq,relative_path,files):
                     sql=f"INSERT INTO HinhAnhXe (maXe, hinhAnh) VALUES (?,?)"
                     cursor.executemany(sql,listHinhAnh)
                 
-                setString = getStringSQL(paramsAccept[1:],"")
+                setString = getStringSQL(paramsAccept[1:-1],"")
                 sql=f"UPDATE Xe set {setString} WHERE maXe='{rq['maXe']}'"
-                
-                params=[rq[value] for value in paramsAccept[1:]]
+                            
+                params=[rq[value] for value in paramsAccept[1:-1]]
                 cursor.execute(sql,params)
                 cursor.commit()
                 rs=printRs(SUCCESS,"Cập nhật xe thành công",None)
