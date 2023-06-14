@@ -71,9 +71,9 @@ def getall(maXe:str):
 
 
 @app.post("/addXe")
-async def addXe(request: Request,images: List[UploadFile] =  Form()):
+async def addXe(request: Request,images: List[UploadFile] =  Form(None)):
     form_data = await request.form()
-
+    
     relative_path = os.path.join(current_directory, 'img\imgXe')
     return await xe.addXe(form_data,relative_path,images)
 
