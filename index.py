@@ -58,7 +58,7 @@ async def updateInfo(request: Request):
 
 @app.get("/getAllXe")
 def getall(q:str=None):
-    return xe.getAllXe(q,None,1)
+    return xe.getAllXe(q,None)
 
 @app.get("/getAllXeAdmin")
 def getall(q:str=None,page:int=None):

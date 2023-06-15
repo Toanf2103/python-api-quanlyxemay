@@ -226,10 +226,10 @@ def getOrderByIdUser(id_user,trang_thai=None):
     rs={}
     strSearch=""
     if trang_thai is not None:
-        strSearch+=f" and trangThai='{trang_thai}' "
+        strSearch+=f" and trangThai=N'{trang_thai}' "
     
     sql=f"SELECT * from DangKyThueXe where maKH='{id_user}' "+strSearch +f" order by ngayBD desc "
-    
+    print(sql)
     cursor.execute(sql)
     data_don = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
