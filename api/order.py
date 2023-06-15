@@ -161,9 +161,10 @@ def addOrder(rq):
         
         new_rows = [row[0] for row in rows]
         
-        xe_not_correct=set(rq['listMoto']) - set(new_rows)
+        xe_not_correct=list(set(rq['listMoto']) - set(new_rows))
+        print(type(xe_not_correct))
         if len(xe_not_correct)!=0:
-            rs= printRs(ERROR,"Xe đã được đặt thuê",list(xe_not_correct))
+            rs= printRs(ERROR,"Xe đã được đặt thuê",xe_not_correct,True)
         else:
             
             sql="{CALL pr_add_dangKyThueXe(?, ?, ?, ?)}"
@@ -215,3 +216,56 @@ def payOrder(rq):
         conn.close()
     return rs
 
+def getOrderByIdUser(id_user,trang_thai=None):
+    
+    
+
+    # kt=(page-1)*10+10
+    conn = connect()
+    cursor = conn.cursor 
+    rs={}
+    strSearch=""
+    if trang_thai is not None:
+        strSearch+=f" and trangThai='{trang_thai}' "
+    
+    sql=f"SELECT * from DangKyThueXe where maKH='{id_user}' "+strSearch +f" order by ngayBD desc "
+    
+    cursor.execute(sql)
+    data_don = cursor.fetchall()
+    columnName=[column[0] for column in cursor.description]
+    data_don=rsData(data_don,columnName)
+    
+
+    sql="SELECT ChiTietThueXe.*,tenXe,loaiXe,hangXe,bienSoXe from ChiTietThueXe,Xe where ChiTietThueXe.maXe=Xe.maXe"
+    cursor.execute(sql)
+    data_chitiet = cursor.fetchall()
+    columnName=[column[0] for column in cursor.description]
+    data_chitiet=rsData(data_chitiet,columnName)
+    
+    sql="SELECT ct.maLoi as maLoi,lp.noiDungLoi as noiDungLoi,ct.ghiChu as ghiChu,ct.tienPhat as tienPhat FROM ChiTietLoiPhat as ct, LoiPhat as lp WHERE ct.maLoaiLoi = lp.maLoaiLoi"
+    cursor.execute(sql)
+    data_loi = cursor.fetchall()
+    columnName=[column[0] for column in cursor.description]
+    data_loi=rsData(data_loi,columnName)
+    
+    sql='SELECT * from HinhAnhXe'
+    cursor.execute(sql)
+    dataHinhAnh=cursor.fetchall()
+    for xe in data_chitiet:
+        xe['hinhAnh']=[]
+        hinh_anh_list = []
+        for hinhAnh in dataHinhAnh:
+            if xe['maXe']==hinhAnh.maXe:
+                hinh_anh_list.append(getURLImg('hinhAnh',hinhAnh.hinhAnh))
+        xe['hinhAnh']=hinh_anh_list
+    
+
+    new_data_chitiet=mergeData(data_chitiet,data_loi,"maLoi","loi")
+    
+    
+    new_data=mergeData(data_don,new_data_chitiet,"maThue","chiTiet")
+    
+    rs = printRs(SUCCESS,None,new_data,True)
+    
+    conn.close()
+    return rs

@@ -26,11 +26,11 @@ def getAllXe(q,role,page=None):
         sqlRole=" trangThai in (N'Hoạt động',N'Đang cho thuê') "
         check=True
     else:
-        sqlPage=f" order by maXe OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
+        sqlPage=f" order by maXe OFFSET {vt} ROWS FETCH NEXT {so_item-1} ROWS ONLY;"
     if q is not None:
         strSearch=f" and tenXe LIKE '%{q}%' "
         check=True
-    where = " WHERE " if check else "as"
+    where = " WHERE " if check else "  "
     
     
     sql='SELECT * FROM Xe'+where+sqlRole+strSearch+sqlPage

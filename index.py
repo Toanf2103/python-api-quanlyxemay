@@ -58,7 +58,7 @@ async def updateInfo(request: Request):
 
 @app.get("/getAllXe")
 def getall(q:str=None):
-    return xe.getAllXe(q,True)
+    return xe.getAllXe(q,None,1)
 
 @app.get("/getAllXeAdmin")
 def getall(q:str=None,page:int=None):
@@ -95,6 +95,10 @@ def getDonHang(q:str=None,page:int=None):
 @app.get("/getOrder/{id_order}")
 def getOrder(id_order):
     return order.getOrder(id_order)
+
+@app.get("/getOrderByIdUser/{id_user}")
+def getOrder(id_user,trangThai:str=None):
+    return order.getOrderByIdUser(id_user,trangThai)
 
 @app.post("/nvSetOrder")
 def nvSetOrder(rq=Body()):

@@ -111,8 +111,11 @@
 
         // formData.append('cccd', "asdasd");
         // formData.append('sdt', "0000");
-        formData.append('avatar', imageInput.files[0]);
-        // formData.append('diaChi', 'Liên chiểu, đà nẵng');
+        // formData.append('avatar', imageInput.files[0]);
+
+        
+
+        formData.append('diaChi', '');
 
         axios.post('http://localhost:5000/updateInfoUser', formData, {
             headers: {
