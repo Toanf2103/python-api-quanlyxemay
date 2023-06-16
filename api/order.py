@@ -10,24 +10,29 @@ SUCCESS='success'
 DATA_INVALID='Data invalid'
 DATA_NULL='Data null'
 
-def getAllOrder(page,q=None,maTaiKhoan=None):
+def getAllOrder(page=None,q=None):
     so_item=10
-    vt=(page-1)*so_item
+    
 
     # kt=(page-1)*10+10
     conn = connect()
     cursor = conn.cursor 
     rs={}
+    
     strSearch=""
+    sqlPage=""
+    if page is not None:
+        vt=(page-1)*so_item
+        sqlPage=f" order by ngayBD desc OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
     if q is not None:     
-        strSearch+=f" WHERE maKH LIKE '%{q}%' or maThue LIKE '%{q}%'"
-    sql=f"SELECT * from DangKyThueXe "+strSearch +f" order by ngayBD desc OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
+        strSearch+=f" and (hoTen LIKE N'%{q}%' or maThue LIKE '%{q}%') "
+    sql=f"SELECT DangKyThueXe.*,hoTen from DangKyThueXe,TaiKhoan WHERE DangKyThueXe.maKH=TaiKhoan.maTaiKhoan "+strSearch+sqlPage
     
     cursor.execute(sql)
     data_don = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
     data_don=rsData(data_don,columnName)
-    
+    soLuong=len(data_don)
 
     sql="SELECT ChiTietThueXe.*,tenXe,loaiXe,hangXe,bienSoXe from ChiTietThueXe,Xe where ChiTietThueXe.maXe=Xe.maXe"
     cursor.execute(sql)
@@ -40,18 +45,27 @@ def getAllOrder(page,q=None,maTaiKhoan=None):
     data_loi = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
     data_loi=rsData(data_loi,columnName)
+
+    sql='SELECT * from HinhAnhXe'
+    cursor.execute(sql)
+    dataHinhAnh=cursor.fetchall()
+    for xe in data_chitiet:
+        xe['hinhAnh']=[]
+        hinh_anh_list = []
+        for hinhAnh in dataHinhAnh:
+            if xe['maXe']==hinhAnh.maXe:
+                hinh_anh_list.append(getURLImg('hinhAnh',hinhAnh.hinhAnh))
+        xe['hinhAnh']=hinh_anh_list
     
     new_data_chitiet=mergeData(data_chitiet,data_loi,"maLoi","loi")
     
     
     new_data=mergeData(data_don,new_data_chitiet,"maThue","chiTiet")
-    print(new_data)
-    sql=f"SELECT count(maThue) as soLuong from DangKyThueXe "+strSearch
-    cursor.execute(sql)
-    row = cursor.fetchone()
-    soLuong=row[0]
+    
+    
     rs = printRs(SUCCESS,None,new_data,True)
-    rs['soTrang']=getSoTrang(soLuong,so_item)
+    if page is not None:
+        rs['soTrang']=getSoTrang(soLuong,so_item)
     conn.close()
     return rs
 
@@ -228,7 +242,7 @@ def getOrderByIdUser(id_user,trang_thai=None):
     if trang_thai is not None:
         strSearch+=f" and trangThai=N'{trang_thai}' "
     
-    sql=f"SELECT * from DangKyThueXe where maKH='{id_user}' "+strSearch +f" order by ngayBD desc "
+    sql=f"SELECT * from DangKyThueXe where maKH='{id_user}' "+strSearch +f" order by maThue desc "
     print(sql)
     cursor.execute(sql)
     data_don = cursor.fetchall()

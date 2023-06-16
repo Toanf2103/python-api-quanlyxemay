@@ -57,14 +57,14 @@ async def updateInfo(request: Request):
 
 
 @app.get("/getAllXe")
-def getall(q:str=None):
-    return xe.getAllXe(q,None)
+def getall(q:str=None,page:int=None):
+    return xe.getAllXe(q,True,page)
 
 @app.get("/getAllXeAdmin")
 def getall(q:str=None,page:int=None):
     if page is None:
         page=1
-    return xe.getAllXe(q,False,page)
+    return xe.getAllXe(q,True,page)
 @app.get("/getXe/{maXe}")
 def getall(maXe:str):
     return xe.getXe(maXe)
@@ -89,8 +89,6 @@ async def updateXe(request: Request,images: List[UploadFile] =  Form(None)):
     
 @app.get("/getAllOrder")
 def getDonHang(q:str=None,page:int=None):
-    if page is None:
-        page=1
     return order.getAllOrder(page,q)
 @app.get("/getOrder/{id_order}")
 def getOrder(id_order):

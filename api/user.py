@@ -189,7 +189,7 @@ def getAllUser(page,role,q):
     rows = cursor.fetchall()
     columnName=[column[0] for column in cursor.description]
     
-    rs = printRs(SUCCESS,None,rsData(rows,columnName))
+    rs = printRs(SUCCESS,None,rsData(rows,columnName),True)
     rs['soTrang']=getSoTrang(soLuong,so_item)
     return rs
     

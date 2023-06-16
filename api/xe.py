@@ -25,11 +25,13 @@ def getAllXe(q,role,page=None):
     if role:
         sqlRole=" trangThai in (N'Hoạt động',N'Đang cho thuê') "
         check=True
-    else:
-        sqlPage=f" order by maXe OFFSET {vt} ROWS FETCH NEXT {so_item-1} ROWS ONLY;"
+   
     if q is not None:
-        strSearch=f" and tenXe LIKE '%{q}%' "
+        strSearch=f" and tenXe LIKE N'%{q}%' or maXe LIKE N'%{q}%'"
         check=True
+
+    if page is not None:
+        sqlPage=f" ORDER BY maXe desc OFFSET {vt} ROWS FETCH NEXT {so_item} ROWS ONLY;"
     where = " WHERE " if check else "  "
     
     
@@ -53,7 +55,7 @@ def getAllXe(q,role,page=None):
                 hinh_anh_list.append(getURLImg('hinhAnh',hinhAnh.hinhAnh))
         xe['hinhAnh']=hinh_anh_list
     rs = printRs(SUCCESS,None,dataXe)
-    if not role:
+    if page:
         sql="SELECT count(maXe) as soluong from Xe "+where+sqlRole+strSearch
         cursor.execute(sql)
         row = cursor.fetchone()
