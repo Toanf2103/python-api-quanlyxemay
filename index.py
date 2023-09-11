@@ -128,7 +128,7 @@ async def getUrlImg(folder:str,filename:str):
     url = os.path.join(current_directory, 'img',folder,filename)
     return FileResponse(url)
 if __name__ == "__main__":    
-    uvicorn.run(app, host="localhost", port=5000)
+    uvicorn.run(app)
 
 
 #lấy đường dẫn Project
