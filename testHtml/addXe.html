@@ -24,15 +24,16 @@
                 console.log(i)
             }
             
-            formData.append('tenXe', 'Xe Máy Honda Winner X 2022 (Thể thao)qweqw');
+            formData.append('tenXe', 'test 100 lan2');
             formData.append('hangXe', 'nhà eqwe334');
-            formData.append('bienSoXe', '8is-wwe2');
+            formData.append('bienSoXe', '8is-ll[fsss]');
             formData.append('loaiXe', 'Ga4');
-            formData.append('giaThue', 210320);
+            formData.append('giaThue', '2.10320');
             formData.append('trangThai', 'Hoạt động');
             formData.append('moTa', null);
-            console.log(formData)
-            axios.post('http://localhost:5000/addXe', formData, {
+            console.log([...formData]);
+            // console.log(formData)
+            axios.post('http://localhost:5000/addXeFirebase', formData, {
                 headers: {
                 'Content-Type': 'multipart/form-data'
                 }

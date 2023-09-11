@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request,Body,Form, UploadFile, File
 from fastapi.responses import FileResponse
 from typing import List
-from api import get,user,xe,order
+from api import get,user,xe,order,xe_firebase
 import json
 import pyodbc
 import uvicorn
@@ -76,6 +76,13 @@ async def addXe(request: Request,images: List[UploadFile] =  Form(None)):
     
     relative_path = os.path.join(current_directory, 'img\imgXe')
     return await xe.addXe(form_data,relative_path,images)
+
+@app.post("/addXeFirebase")
+async def addXe(request: Request,images: List[UploadFile] =  Form(None)):
+    form_data = await request.form()
+    
+    relative_path = os.path.join(current_directory, 'img\imgXe')
+    return await xe_firebase.addXe(form_data,relative_path,images)
 
 @app.post("/updateXe")
 async def updateXe(request: Request,images: List[UploadFile] =  Form(None)):
