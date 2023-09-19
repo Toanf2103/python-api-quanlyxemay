@@ -28,6 +28,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+@app.get("/")
+def read_root():
+    return {"Hello": "World"}
 
 @app.post("/login")
 def login(rq = Body()):
@@ -127,8 +130,7 @@ def getAllLoi():
 async def getUrlImg(folder:str,filename:str):
     url = os.path.join(current_directory, 'img',folder,filename)
     return FileResponse(url)
-if __name__ == "__main__":    
-    uvicorn.run(app)
+
 
 
 #lấy đường dẫn Project
